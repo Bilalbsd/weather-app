@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tp2_flutter_bilalb/screens/profile_page.dart';
+import 'package:tp2_flutter_bilalb/display/profile_display.dart';
 import 'package:tp2_flutter_bilalb/widgets/weather_widget.dart';
 
 void main() => runApp(const MyApp());

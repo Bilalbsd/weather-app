@@ -85,7 +85,7 @@ class ProfileHomePage extends StatelessWidget {
                 ),
               ),
               child: const Text(
-                'Commencer le Quiz',
+                'Visualiser la météo',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

@@ -13,6 +13,7 @@ class WeatherModel {
   final int windDeg;
   final int visibility;
   final int cloudiness;
+  final DateTime dateTime;
   final DateTime sunrise;
   final DateTime sunset;
 
@@ -31,6 +32,7 @@ class WeatherModel {
     required this.windDeg,
     required this.visibility,
     required this.cloudiness,
+    required this.dateTime,
     required this.sunrise,
     required this.sunset,
   });
@@ -56,6 +58,9 @@ class WeatherModel {
       windDeg: json['wind']['deg'] as int, // Direction du vent
       visibility: json['visibility'] as int, // Visibilité (en mètres)
       cloudiness: json['clouds']['all'] as int, // Couverture nuageuse
+      dateTime: DateTime.fromMicrosecondsSinceEpoch(
+        json['dt'] * 1000,
+      ),
       sunrise: DateTime.fromMillisecondsSinceEpoch(
         json['sys']['sunrise'] *
             1000, // Conversion du temps en secondes en DateTime

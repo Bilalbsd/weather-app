@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tp2_flutter_bilalb/models/weather.dart';
 import 'package:tp2_flutter_bilalb/models/forecast.dart';
 import 'package:tp2_flutter_bilalb/service/weather_service.dart';
-import 'package:tp2_flutter_bilalb/widgets/weather_display.dart';
-import 'package:tp2_flutter_bilalb/widgets/forecast_display.dart';
+import 'package:tp2_flutter_bilalb/display/weather_display.dart';
+import 'package:tp2_flutter_bilalb/display/forecast_display.dart';
 
 class WeatherApp extends StatefulWidget {
   const WeatherApp({super.key});
@@ -15,8 +15,7 @@ class WeatherApp extends StatefulWidget {
 class _WeatherAppState extends State<WeatherApp> {
   final TextEditingController _controller = TextEditingController();
   WeatherModel? _weatherModel;
-  List<ForecastModel>?
-      _forecastList; // Correction : Utiliser List<ForecastModel>
+  List<ForecastModel>? _forecastList;
   bool _isLoading = false;
   String _error = '';
 
@@ -35,9 +34,7 @@ class _WeatherAppState extends State<WeatherApp> {
 
       setState(() {
         _weatherModel = weather;
-        _forecastList = forecast
-            .take(8)
-            .toList(); // Les 8 premières prévisions (environ 24h)
+        _forecastList = forecast.take(8).toList(); // 8 prévisions (24h)
         _isLoading = false;
       });
     } catch (e) {
@@ -51,15 +48,22 @@ class _WeatherAppState extends State<WeatherApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Weather App')),
+      appBar: AppBar(
+        title: const Text('Weather App'),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // Champ de saisie pour le nom de la ville
             TextField(
               controller: _controller,
               decoration: InputDecoration(
                 labelText: 'Enter city name',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: _fetchWeather,
@@ -67,32 +71,37 @@ class _WeatherAppState extends State<WeatherApp> {
               ),
             ),
             const SizedBox(height: 20),
+            // Affichage du loader ou du contenu
             if (_isLoading)
               const CircularProgressIndicator()
             else if (_error.isNotEmpty)
               Text(
                 _error,
-                style: const TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red, fontSize: 16),
               )
             else if (_weatherModel != null)
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
                   children: [
-                    // Affichage des données météo actuelles
+                    // Affichage de la météo actuelle
                     WeatherDisplay(weather: _weatherModel!),
                     const SizedBox(height: 20),
-                    // Titre pour les prévisions
+                    // Titre des prévisions
                     const Text(
-                      'Forecast for the next hours:',
+                      'Prévisions pour les 5 prochains jours:',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
-                    // Affichage des prévisions si disponibles
+                    // Prévisions
                     _forecastList != null
                         ? ForecastDisplay(forecast: _forecastList!)
-                        : const Text('No forecast data available'),
+                        : const Text(
+                            'No forecast data available',
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
                   ],
                 ),
               ),

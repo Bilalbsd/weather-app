@@ -26,11 +26,29 @@ class WeatherService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      final List<dynamic> list =
-          data['list']; // Utiliser 'list' pour la prévision
+      final List<dynamic> list = data['list'];
 
-      // Récupère les prévisions pour les 5 premiers jours
-      return list.take(5).map((json) => ForecastModel.fromJson(json)).toList();
+      // Obtenons la date actuelle pour filtrer les jours suivants
+      DateTime currentDate = DateTime.now();
+
+      // On va filtrer les prévisions des 5 jours suivants
+      List<ForecastModel> forecastList = [];
+
+      // Parcourir la liste des prévisions pour trouver celles des 5 jours suivants
+      for (int i = 0; i < list.length; i += 8) {
+        var forecastData = list[i];
+        // Convertir le timestamp en DateTime
+        DateTime forecastDate =
+            DateTime.fromMillisecondsSinceEpoch(forecastData['dt'] * 1000);
+
+        // Si la prévision est pour un jour après aujourd'hui, on l'ajoute à la liste
+        if (forecastDate.isAfter(currentDate) && forecastList.length < 5) {
+          forecastList.add(ForecastModel.fromJson(forecastData));
+        }
+      }
+
+      // Retourner la liste des prévisions
+      return forecastList;
     } else {
       throw Exception('Failed to fetch forecast data');
     }
