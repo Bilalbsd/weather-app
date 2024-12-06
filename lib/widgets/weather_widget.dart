@@ -60,7 +60,7 @@ class _WeatherAppState extends State<WeatherApp> {
             TextField(
               controller: _controller,
               decoration: InputDecoration(
-                labelText: 'Enter city name',
+                labelText: 'Entrez le nom de la ville',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

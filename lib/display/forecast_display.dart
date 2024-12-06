@@ -17,6 +17,7 @@ class ForecastDisplay extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = forecast[index];
           return Card(
+            color: Colors.blue[200],
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
